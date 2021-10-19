@@ -8,15 +8,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Cliente from './pages/cliente';
 import Produto from './pages/produto';
 import ClienteForm from './pages/cliente/clienteForm';
+import EditClienteForm from './pages/cliente/editClienteForm';
+import ProdutoForm from './pages/produto/produtoForm';
+import EditProdutoForm from './pages/produto/editProdutoForm';
+import Pedido from './pages/pedido';
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route path="/" exact={true} component={App} />
+      <Route path="/pedidos" component={Pedido} />
       <Route path="/clientes" component={Cliente} />
       <Route path="/clientes-create" component={ClienteForm} />
-      <Route path="/clientes-edit" component={ClienteForm} />
+      <Route path="/clientes-edit/:idCliente" component={EditClienteForm} />
       <Route path="/produtos" component={Produto} />
+      <Route path="/produtos-create" component={ProdutoForm} />
+      <Route path="/produtos-edit/:idProduto" component={EditProdutoForm} />
     </Switch>
   </BrowserRouter>,
   document.getElementById('root')

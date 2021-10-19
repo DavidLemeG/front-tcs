@@ -1,17 +1,26 @@
-body{
+body {
   background: #f0f2f5 !important;
 }
 
-h1{
+h1 {
   text-align: center;
   margin: 2rem 0 !important;
+}
+
+.div-menu {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.form-inline a {
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
 .form-inline {
   margin-left: 5rem !important;
   margin-right: 5rem !important;
   padding: 3rem !important;
-
   background: #ffffff;
   box-sizing: border-box;
   border-radius: 10px;
@@ -23,6 +32,10 @@ h1{
   line-height: 43px;
 }
 
-.button-form{
+.button-create {
+  margin-left: 95%;
+}
+
+.button-form {
   margin-top: 24px !important;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -11,10 +12,10 @@ import { zipCodeMask } from "../../../util/zipCodeMask";
 import { cpfMask } from "../../../util/cpfMask";
 import { cellphoneMask } from "../../../util/cellphoneMask";
 // import { useLoading } from "../../../hooks/useLoading";
-import { CreateCliente } from "../../../services/clienteService";
-import { useHistory } from "react-router";
+import { GetCliente, UpdateCliente } from "../../../services/clienteService";
+import { useHistory, useParams } from "react-router";
 
-const ClienteForm = (props) => {
+export function EditClienteForm() {
   const { register, handleSubmit, watch, setValue } = useForm();
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
@@ -24,9 +25,55 @@ const ClienteForm = (props) => {
   const history = useHistory();
   // const { setLoading } = useLoading();
 
+  const params = useParams();
+  const idCliente = params.idCliente;
 
   useEffect(() => {
+    _getCliente();
   }, []);
+
+  const _getCliente = () => {
+    // setLoading(true);
+    GetCliente(idCliente).then(
+      (resp) => {
+        let data = resp.data
+
+        setValue("nome", data.nome);
+        setValue("sexo", data.sexo);
+        setValue("logradouro", data.logradouro);
+        setValue("bairro", data.bairro);
+        setValue("cidade", data.cidade);
+        setValue("uf", data.uf);
+
+        setCellWithMask(data.celular);
+        setTellWithMask(data.telefone);
+        setCpfWithMask(data.cpf);
+        setCepWithMask(data.cep);
+
+        // setLoading(false);
+      },
+      (error) => {
+        // setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === 'object') {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
+  };
 
   async function viacepSearch(event) {
     const valor = event.target.value;
@@ -56,22 +103,6 @@ const ClienteForm = (props) => {
       }
     }
   }
-
-  // const _getAllOrders = () => {
-  //   GetAllOrders().then(
-  //     (resp) => {
-  //       let data = resp.data.data;
-
-  //       let actualPages = [];
-  //       for (let i = 1; i <= resp.data.last_page; i++) {
-  //         actualPages.push(i);
-  //       }
-  //       setPages(actualPages);
-  //       setOrders(data);
-  //     },
-  //     (error) => { }
-  //   );
-  // };
 
   const validationBeforeCreate = () => {
     let form = watch();
@@ -130,18 +161,19 @@ const ClienteForm = (props) => {
     return hasError;
   };
 
-  const createNewCliente = (form) => {
+  const updateCliente = (form) => {
     // setLoading(true);
+
 
     let data = {
       ...form,
-      cep: cepWithMask
+      cep: cepWithMask,
     }
 
-    CreateCliente(data).then(
+    UpdateCliente(idCliente, data).then(
       (resp) => {
         // setLoading(false);
-        toast.success("Cliente cadastrado com sucesso!");
+        toast.success("Cliente editado com sucesso!");
         history.push('/clientes')
       },
       (error) => {
@@ -184,14 +216,14 @@ const ClienteForm = (props) => {
 
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
-      createNewCliente(form);
+      updateCliente(form);
     }
   }
 
   return (
     <div>
       <Header />
-      <h1>Criar Cliente</h1>
+      <h1>Editar Cliente</h1>
       <form className="form-inline" onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-lg-3 col-sm-12">
@@ -400,7 +432,7 @@ const ClienteForm = (props) => {
             <Button className="button-form" color="dark" type="submit">
               Enviar
             </Button>
-            </div>
+          </div>
           <div className="col-lg-1 col-sm-12">
             <Button className="button-form" href="/clientes" variant="outline-dark">Voltar</Button>
           </div>
@@ -408,6 +440,7 @@ const ClienteForm = (props) => {
       </form>
     </div>
   );
-};
+}
 
-export default ClienteForm;
+
+export default EditClienteForm;

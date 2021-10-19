@@ -30,11 +30,13 @@ return (
               Itens
             </DropdownToggle>
             <DropdownMenu right>
-            <Link to="/"><DropdownItem>Pedidos</DropdownItem></Link>
+            <Link to="/"><DropdownItem>Home</DropdownItem></Link>
               <DropdownItem divider />
               <Link to="/clientes"><DropdownItem>Clientes</DropdownItem></Link>
               <DropdownItem divider />
               <Link to="/produtos"><DropdownItem>Produtos</DropdownItem></Link>
+              <DropdownItem divider />
+              <Link to="/pedidos"><DropdownItem>Produtos</DropdownItem></Link>
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>

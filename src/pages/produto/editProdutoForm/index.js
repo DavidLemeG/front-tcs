@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -7,18 +8,56 @@ import { Button } from 'react-bootstrap';
 import Header from "../../../layout/header/Header";
 import { toast } from "react-toastify";
 // import { useLoading } from "../../../hooks/useLoading";
-import { useHistory } from "react-router";
-import { CreateProduto } from "../../../services/produtoService";
+import { useHistory, useParams } from "react-router";
+import { GetProduto, UpdateProduto } from "../../../services/produtoService";
 
-const ProdutoForm = (props) => {
-  const { register, handleSubmit, watch } = useForm();
+export function EditProdutoForm() {
+  const { register, handleSubmit, watch, setValue } = useForm();
   const [validationState, setValidationState] = useState([]);
   const history = useHistory();
   // const { setLoading } = useLoading();
 
+  const params = useParams();
+  const idProduto = params.idProduto;
 
   useEffect(() => {
+    _getProduto();
   }, []);
+
+  const _getProduto = () => {
+    // setLoading(true);
+    GetProduto(idProduto).then(
+      (resp) => {
+        let data = resp.data
+
+        setValue("descricao", data.descricao);
+        setValue("tipoProduto", data.tipoProduto);
+        setValue("valor", data.valor);
+        setValue("quantidadeEstoque", data.quantidadeEstoque);
+        // setLoading(false);
+      },
+      (error) => {
+        // setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === 'object') {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
+  };
 
   const validationBeforeCreate = () => {
     let form = watch();
@@ -53,22 +92,17 @@ const ProdutoForm = (props) => {
     return hasError;
   };
 
-  const createNewProduto = (form) => {
+  const  updateProduto= (form) => {
     // setLoading(true);
-
-    let val = parseFloat(form.valor);
-     let qtd = parseInt(form.quantidadeEstoque);
 
     let data = {
       ...form,
-      valor: val,
-      quantidadeEstoque: qtd
     }
 
-     CreateProduto(data).then(
+    UpdateProduto(idProduto, data).then(
       (resp) => {
         // setLoading(false);
-        toast.success("Produto cadastrado com sucesso!");
+        toast.success("Produto editado com sucesso!");
         history.push('/produtos')
       },
       (error) => {
@@ -95,14 +129,14 @@ const ProdutoForm = (props) => {
 
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
-      createNewProduto(form);
+      updateProduto(form);
     }
   }
 
   return (
     <div>
       <Header />
-      <h1>Criar Produto</h1>
+      <h1>Editar Cliente</h1>
       <form className="form-inline" onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-lg-4 col-sm-12">
@@ -183,6 +217,7 @@ const ProdutoForm = (props) => {
       </form>
     </div>
   );
-};
+}
 
-export default ProdutoForm;
+
+export default EditProdutoForm;

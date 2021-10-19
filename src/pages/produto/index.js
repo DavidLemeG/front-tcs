@@ -1,244 +1,89 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import {
-  Button,
-  Card,
-  CardText,
-  CardTitle,
-  Label,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Table,
 } from "reactstrap";
+import { Button } from 'react-bootstrap';
 import Header from "../../layout/header/Header";
-import { GetAllOrders, GetFilteredOrders, GetAllPrices } from "../../services/sellerService";
+import { RiDeleteBin7Line } from "react-icons/ri";
+import { FiEdit2 } from "react-icons/fi";
+import { toast } from "react-toastify";
+import confirmService from "../../components/confirmDialog";
+import { DeleteProduto, GetAllProdutos } from "../../services/produtoService";
 
 const Produto = (props) => {
-  const { register, handleSubmit, watch } = useForm();
-
-  const [orders, setOrders] = useState([]);
-  const [pages, setPages] = useState([]);
-  const [sellerPrices, setSellerPrices] = useState({
-    seller1: "",
-    seller2: "",
-    seller3: "",
-  });
-
+  const [produto, setProduto] = useState([]);
 
   useEffect(() => {
-    _getAllOrders();
-    _getAllPricesForSeller();
-
+    _getAllProdutos()
   }, []);
 
-  const _getAllOrders = () => {
-    GetAllOrders().then(
-      (resp) => {
-        let data = resp.data.data;
-
-        let actualPages = [];
-        for (let i = 1; i <= resp.data.last_page; i++) {
-          actualPages.push(i);
-        }
-        setPages(actualPages);
-        setOrders(data);
-      },
-      (error) => { }
-    );
-  };
-
-  const _getAllPricesForSeller = () => {
-    GetAllPrices().then(
+  const _getAllProdutos = () => {
+    GetAllProdutos().then(
       (resp) => {
         let data = resp.data;
-
-        let totalSeller1 = data.reduce((somaTotal, order) => {
-          if (order.seller === "Seller #1") {
-            somaTotal += order.price
-          }
-
-          return somaTotal;
-        }, 0)
-
-        let totalSeller2 = data.reduce((somaTotal, order) => {
-          if (order.seller === "Seller #2") {
-            somaTotal += order.price
-          }
-
-          return somaTotal;
-        }, 0)
-
-        let totalSeller3 = data.reduce((somaTotal, order) => {
-          if (order.seller === "Seller #3") {
-            somaTotal += order.price
-          }
-
-          return somaTotal;
-        }, 0)
-
-        setSellerPrices({
-          seller1: totalSeller1,
-          seller2: totalSeller2,
-          seller3: totalSeller3,
-        });
+        setProduto(data);
       },
       (error) => { }
     );
   };
 
-  const find = (form, paginationPages) => {
-    let seller = form.seller;
-    let country = form.country;
-    let page = paginationPages;
+  const showDeleteDialog = async (id) => {
+    let props = {}
 
-    GetFilteredOrders(seller, country, page).then((resp) => {
-      let data = resp.data.data;
-
-      let actualPages = [];
-      for (let i = 1; i <= resp.data.last_page; i++) {
-        actualPages.push(i);
-      }
-      setPages(actualPages);
-
-      setOrders(data);
-    });
-
+    const result = await confirmService.show(props);
+    if (result) {
+      DeleteProduto(id).then(
+        (data) => {
+          toast.success("Produto deletado com sucesso!");
+          let tbl = produto.filter(
+            (c) => !(c.idProduto === id)
+          );
+          setProduto(tbl);
+        },
+        (error) => {
+          toast.error("Não foi possível deletar os dados.");
+        }
+      );
+    }
   };
-
-  const pagination = (data) => {
-    let form = watch();
-
-    find(form, data);
-  }
 
   return (
     <div>
       <Header />
       <h1>Produtos</h1>
-      <form className="form-inline" onSubmit={handleSubmit(find)}>
-        <div className="row">
-          <div className="col-lg-4 col-sm-12">
-            <Card
-              body
-              inverse
-              style={{
-                height: "10rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#333",
-                borderColor: "#333",
-              }}
-            >
-              <CardTitle tag="h3">Total do Sellers #1</CardTitle>
-              <CardText tag="h4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sellerPrices.seller1)}</CardText>
-            </Card>
-          </div>
-          <div className="col-lg-4 col-sm-12">
-            <Card
-              body
-              inverse
-              style={{
-                height: "10rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#333",
-                borderColor: "#333",
-              }}
-            >
-              <CardTitle tag="h3">Total do Sellers #2</CardTitle>
-              <CardText tag="h4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sellerPrices.seller2)}</CardText>
-            </Card>
-          </div>
-          <div className="col-lg-4 col-sm-12">
-            <Card
-              body
-              inverse
-              style={{
-                height: "10rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#333",
-                borderColor: "#333",
-              }}
-            >
-              <CardTitle tag="h3">Total do Sellers #3</CardTitle>
-              <CardText tag="h4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sellerPrices.seller3)}</CardText>
-            </Card>
-          </div>
-        </div>
-        <br />
-        <div className="row">
-          <div className="col-lg-2 col-sm-12">
-            <Label for="seller">Vendedores</Label>
-            <select
-              className="form-control"
-              name="seller"
-              id="seller"
-              ref={register}
-            >
-              <option value="">Selecione</option>
-              <option value="">Todos os Vendedores</option>
-              <option value="1">Somente os Sellers #1</option>
-              <option value="2">Somente os Sellers #2</option>
-              <option value="3">Somente os Sellers #3</option>
-            </select>
-          </div>
-
-          <div className="col-lg-2 col-sm-12">
-            <Label for="country">Paises</Label>
-            <select
-              className="form-control"
-              name="country"
-              id="country"
-              ref={register}
-            >
-              <option value="">Selecione</option>
-              <option value="">Todos os Paises</option>
-              <option value="bra">Brasil</option>
-              <option value="arg">Argentina</option>
-              <option value="mex">México</option>
-            </select>
-          </div>
-          <div className="col-lg-2 col-sm-12">
-            <Button className="button-form" color="dark" type="submit">
-              Enviar
-            </Button>
-          </div>
-        </div>
-
+      <form className="form-inline">
+        <Button className="button-create" href="/produtos-create" variant="outline-dark">Criar</Button>
         <Table className="table-form" striped hover responsive>
           <thead>
             <tr>
-              <th>Ordem de Id</th>
-              <th>Produto</th>
-              <th>Preço</th>
-              <th>Vendedor</th>
-              <th>País</th>
+              <th>Id</th>
+              <th>Descrição</th>
+              <th>Tipo do Produto</th>
+              <th>Valor</th>
+              <th>Qtd. em Estoque</th>
+              <td></td>
+              <td></td>
             </tr>
           </thead>
-          <tbody>{ }
-            {orders.map((data, index) => (
+          <tbody>
+
+            {produto.map((data, index) =>
+            (
               <tr className="table-row" key={index}>
-                <td>{data.orderId}</td>
-                <td>{data.product}</td>
-                <td>{data.price}</td>
-                <td>{data.seller}</td>
-                <td>{data.country}</td>
+                <td>{data.idProduto}</td>
+                <td> {data.descricao}</td>
+                <td>{data.tipoProduto}</td>
+                <td>{data.valor}</td>
+                <td>{data.quantidadeEstoque}</td>
+                <td width="5%"><Button href={"/produtos-edit/" + data.idProduto} variant="outline-dark"><FiEdit2 /></Button></td>
+                <td width="5%"><Button variant="outline-dark" onClick={() =>
+                  showDeleteDialog(data.idProduto)
+                }><RiDeleteBin7Line /></Button></td>
               </tr>
             ))}
+
           </tbody>
         </Table>
-        <Pagination aria-label="Page navigation example">
-          {pages.map((data, index) => (
-            <PaginationItem key={'p-' + index}>
-              <PaginationLink style={{ cursor: 'pointer', color: '#000' }} href={() => false} onClick={() => pagination(data)}>{data}</PaginationLink>
-            </PaginationItem>
-          ))}
-        </Pagination>
       </form>
     </div>
   );
