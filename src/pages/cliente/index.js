@@ -21,7 +21,6 @@ const Cliente = (props) => {
     GetAllClientes().then(
       (resp) => {
         let data = resp.data;
-        console.log(data)
         setCliente(data);
       },
       (error) => { }

@@ -19,8 +19,6 @@ const Pedido = (props) => {
       (resp) => {
         let data = resp.data;
 
-        console.log(data);
-
         setPedido(data);
       },
       (error) => { }
