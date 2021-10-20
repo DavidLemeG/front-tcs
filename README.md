@@ -1,7 +1,7 @@
 # Conteúdos para baixar:
 
-  React: v17.0
-  npm: https://nodejs.org/dist/v14.18.1/node-v14.18.1-x64.msi para download
+  React: v17.0.\
+  npm: https://nodejs.org/dist/v14.18.1/node-v14.18.1-x64.msi para download.
   
 ## Para compilar o projeto é preciso abrir e digitar os seguintes comandos:
 
