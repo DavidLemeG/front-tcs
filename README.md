@@ -8,6 +8,6 @@
 ### `npm i`   * para instalar as dependencias do node_modules.
 ### `npm start`
 
-ps: Está alguns mini conteúdos mas os principais está no projeto.
+ps: Está faltando alguns mini conteúdos mas os principais está no projeto.
 
 back-end: https://github.com/DavidLemeG/estoque-tcs
