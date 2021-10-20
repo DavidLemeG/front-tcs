@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { zipCodeMask } from "../../../util/zipCodeMask";
 import { cpfMask } from "../../../util/cpfMask";
 import { cellphoneMask } from "../../../util/cellphoneMask";
-// import { useLoading } from "../../../hooks/useLoading";
 import { CreateCliente } from "../../../services/clienteService";
 import { useHistory } from "react-router";
 
@@ -22,7 +21,6 @@ const ClienteForm = (props) => {
   const [cellWithMask, setCellWithMask] = useState("");
   const [tellWithMask, setTellWithMask] = useState("");
   const history = useHistory();
-  // const { setLoading } = useLoading();
 
 
   useEffect(() => {
@@ -56,22 +54,6 @@ const ClienteForm = (props) => {
       }
     }
   }
-
-  // const _getAllOrders = () => {
-  //   GetAllOrders().then(
-  //     (resp) => {
-  //       let data = resp.data.data;
-
-  //       let actualPages = [];
-  //       for (let i = 1; i <= resp.data.last_page; i++) {
-  //         actualPages.push(i);
-  //       }
-  //       setPages(actualPages);
-  //       setOrders(data);
-  //     },
-  //     (error) => { }
-  //   );
-  // };
 
   const validationBeforeCreate = () => {
     let form = watch();
@@ -131,7 +113,6 @@ const ClienteForm = (props) => {
   };
 
   const createNewCliente = (form) => {
-    // setLoading(true);
 
     let data = {
       ...form,
@@ -140,12 +121,10 @@ const ClienteForm = (props) => {
 
     CreateCliente(data).then(
       (resp) => {
-        // setLoading(false);
         toast.success("Cliente cadastrado com sucesso!");
         history.push('/clientes')
       },
       (error) => {
-        // setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
@@ -240,8 +219,8 @@ const ClienteForm = (props) => {
               }
             >
               <option value="">Selecione</option>
-              <option value="M">Homem</option>
-              <option value="F">Mulher</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
               <option value="O">Outro</option>
             </select>
           </div>
@@ -256,7 +235,7 @@ const ClienteForm = (props) => {
               id="telefone"
               onChange={onChangeTell}
               value={tellWithMask}
-              maxlength="14"
+              maxLength="14"
               ref={register}
               type="text"
             />
@@ -269,7 +248,7 @@ const ClienteForm = (props) => {
               id="celular"
               onChange={onChangeCell}
               value={cellWithMask}
-              maxlength="15"
+              maxLength="15"
               ref={register}
               type="text"
             />

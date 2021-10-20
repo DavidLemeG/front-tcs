@@ -36,7 +36,7 @@ return (
               <DropdownItem divider />
               <Link to="/produtos"><DropdownItem>Produtos</DropdownItem></Link>
               <DropdownItem divider />
-              <Link to="/pedidos"><DropdownItem>Produtos</DropdownItem></Link>
+              <Link to="/pedidos"><DropdownItem>Pedidos</DropdownItem></Link>
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>

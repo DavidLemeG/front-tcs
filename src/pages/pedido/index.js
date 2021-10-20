@@ -5,7 +5,6 @@ import {
 import { Button } from 'react-bootstrap';
 import Header from "../../layout/header/Header";
 import { GetAllPedidos } from "../../services/pedidoService";
-import { GrView } from "react-icons/gr";
 
 const Pedido = (props) => {
   const [pedido, setPedido] = useState([]);
@@ -18,7 +17,6 @@ const Pedido = (props) => {
     GetAllPedidos().then(
       (resp) => {
         let data = resp.data;
-
         setPedido(data);
       },
       (error) => { }
@@ -50,7 +48,6 @@ const Pedido = (props) => {
                 <td width="25%"> {data.cliente.nome}</td>
                 <td width="25%">{data.dtPedido}</td>
                 <td width="20%">{data.valorTotal}</td>
-                <td width="5%"><Button href={"/pedido-view/" + data.idPedido} variant="outline-dark"><GrView /></Button></td>
               </tr>
             ))}
 

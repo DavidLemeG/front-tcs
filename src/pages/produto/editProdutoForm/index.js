@@ -7,7 +7,6 @@ import {
 import { Button } from 'react-bootstrap';
 import Header from "../../../layout/header/Header";
 import { toast } from "react-toastify";
-// import { useLoading } from "../../../hooks/useLoading";
 import { useHistory, useParams } from "react-router";
 import { GetProduto, UpdateProduto } from "../../../services/produtoService";
 
@@ -15,7 +14,6 @@ export function EditProdutoForm() {
   const { register, handleSubmit, watch, setValue } = useForm();
   const [validationState, setValidationState] = useState([]);
   const history = useHistory();
-  // const { setLoading } = useLoading();
 
   const params = useParams();
   const idProduto = params.idProduto;
@@ -25,7 +23,6 @@ export function EditProdutoForm() {
   }, []);
 
   const _getProduto = () => {
-    // setLoading(true);
     GetProduto(idProduto).then(
       (resp) => {
         let data = resp.data
@@ -34,10 +31,8 @@ export function EditProdutoForm() {
         setValue("tipoProduto", data.tipoProduto);
         setValue("valor", data.valor);
         setValue("quantidadeEstoque", data.quantidadeEstoque);
-        // setLoading(false);
       },
       (error) => {
-        // setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
@@ -93,7 +88,6 @@ export function EditProdutoForm() {
   };
 
   const  updateProduto= (form) => {
-    // setLoading(true);
 
     let data = {
       ...form,
@@ -101,12 +95,10 @@ export function EditProdutoForm() {
 
     UpdateProduto(idProduto, data).then(
       (resp) => {
-        // setLoading(false);
         toast.success("Produto editado com sucesso!");
         history.push('/produtos')
       },
       (error) => {
-        // setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {

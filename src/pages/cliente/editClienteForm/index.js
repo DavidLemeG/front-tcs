@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 import { zipCodeMask } from "../../../util/zipCodeMask";
 import { cpfMask } from "../../../util/cpfMask";
 import { cellphoneMask } from "../../../util/cellphoneMask";
-// import { useLoading } from "../../../hooks/useLoading";
 import { GetCliente, UpdateCliente } from "../../../services/clienteService";
 import { useHistory, useParams } from "react-router";
 
@@ -23,7 +22,6 @@ export function EditClienteForm() {
   const [cellWithMask, setCellWithMask] = useState("");
   const [tellWithMask, setTellWithMask] = useState("");
   const history = useHistory();
-  // const { setLoading } = useLoading();
 
   const params = useParams();
   const idCliente = params.idCliente;
@@ -33,7 +31,6 @@ export function EditClienteForm() {
   }, []);
 
   const _getCliente = () => {
-    // setLoading(true);
     GetCliente(idCliente).then(
       (resp) => {
         let data = resp.data
@@ -50,10 +47,8 @@ export function EditClienteForm() {
         setCpfWithMask(data.cpf);
         setCepWithMask(data.cep);
 
-        // setLoading(false);
       },
       (error) => {
-        // setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
@@ -162,8 +157,6 @@ export function EditClienteForm() {
   };
 
   const updateCliente = (form) => {
-    // setLoading(true);
-
 
     let data = {
       ...form,
@@ -172,12 +165,10 @@ export function EditClienteForm() {
 
     UpdateCliente(idCliente, data).then(
       (resp) => {
-        // setLoading(false);
         toast.success("Cliente editado com sucesso!");
         history.push('/clientes')
       },
       (error) => {
-        // setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
@@ -272,8 +263,8 @@ export function EditClienteForm() {
               }
             >
               <option value="">Selecione</option>
-              <option value="M">Homem</option>
-              <option value="F">Mulher</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
               <option value="O">Outro</option>
             </select>
           </div>
@@ -288,7 +279,7 @@ export function EditClienteForm() {
               id="telefone"
               onChange={onChangeTell}
               value={tellWithMask}
-              maxlength="14"
+              maxLength="14"
               ref={register}
               type="text"
             />
@@ -301,7 +292,7 @@ export function EditClienteForm() {
               id="celular"
               onChange={onChangeCell}
               value={cellWithMask}
-              maxlength="15"
+              maxLength="15"
               ref={register}
               type="text"
             />

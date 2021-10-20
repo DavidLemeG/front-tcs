@@ -9,6 +9,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import confirmService from "../../components/confirmDialog";
 import { DeleteProduto, GetAllProdutos } from "../../services/produtoService";
+import { formatPrice } from "../../util/formatPrice";
 
 const Produto = (props) => {
   const [produto, setProduto] = useState([]);
@@ -73,7 +74,7 @@ const Produto = (props) => {
                 <td>{data.idProduto}</td>
                 <td> {data.descricao}</td>
                 <td>{data.tipoProduto}</td>
-                <td>{data.valor}</td>
+                <td>{formatPrice(data.valor)}</td>
                 <td>{data.quantidadeEstoque}</td>
                 <td width="5%"><Button href={"/produtos-edit/" + data.idProduto} variant="outline-dark"><FiEdit2 /></Button></td>
                 <td width="5%"><Button variant="outline-dark" onClick={() =>

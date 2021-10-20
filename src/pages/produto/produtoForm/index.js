@@ -6,7 +6,6 @@ import {
 import { Button } from 'react-bootstrap';
 import Header from "../../../layout/header/Header";
 import { toast } from "react-toastify";
-// import { useLoading } from "../../../hooks/useLoading";
 import { useHistory } from "react-router";
 import { CreateProduto } from "../../../services/produtoService";
 
@@ -14,7 +13,6 @@ const ProdutoForm = (props) => {
   const { register, handleSubmit, watch } = useForm();
   const [validationState, setValidationState] = useState([]);
   const history = useHistory();
-  // const { setLoading } = useLoading();
 
 
   useEffect(() => {
@@ -54,7 +52,6 @@ const ProdutoForm = (props) => {
   };
 
   const createNewProduto = (form) => {
-    // setLoading(true);
 
     let val = parseFloat(form.valor);
      let qtd = parseInt(form.quantidadeEstoque);
@@ -67,12 +64,10 @@ const ProdutoForm = (props) => {
 
      CreateProduto(data).then(
       (resp) => {
-        // setLoading(false);
         toast.success("Produto cadastrado com sucesso!");
         history.push('/produtos')
       },
       (error) => {
-        // setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
