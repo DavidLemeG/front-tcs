@@ -36,7 +36,6 @@ const Pedido = (props) => {
               <th>Cliente</th>
               <th>Data do Pedido</th>
               <th>Valor</th>
-              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -47,7 +46,7 @@ const Pedido = (props) => {
                 <td width="25%">{data.idPedido}</td>
                 <td width="25%"> {data.cliente.nome}</td>
                 <td width="25%">{data.dtPedido}</td>
-                <td width="20%">{data.valorTotal}</td>
+                <td width="25%">{data.valorTotal}</td>
               </tr>
             ))}
 

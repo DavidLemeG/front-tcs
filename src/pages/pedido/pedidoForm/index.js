@@ -161,7 +161,6 @@ const PedidoForm = (props) => {
   }
 
   const createPedido = (form) => {
-    console.log("Selected", selectedProduto)
 
     const atualizarItens = pedido.pedidoItens.map((item) => {
       return { ...item };
